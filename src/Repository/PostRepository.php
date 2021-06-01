@@ -2,6 +2,8 @@
 
 namespace Blog\Repository;
 
+use Blog\Entity\Post;
+
 class PostRepository extends AbstractRepository
 {
     public const TABLE = 'post';
@@ -49,6 +51,19 @@ class PostRepository extends AbstractRepository
         } else {
             return null;
         }
+    }
+
+    public function insert(Post $post): int
+    {
+        $sql = 'INSERT INTO ' . self::TABLE . '(id, title, content, user_id, post_date, slug) VALUES (?, ?, ?, ?, ?, ?)';
+        $this->persistance->execute($sql, [null, $post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug()]);
+        return $this->persistance->lastInsertId();
+    }
+
+    public function update(Post $post): void
+    {
+        $sql = 'UPDATE ' . self::TABLE . ' SET title=?, content=?, user_id=?, post_date=?, slug=?, changed_at=? WHERE id=?';
+        $this->persistance->execute($sql, [$post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug(), date("Y-m-d H:i:s"), $post->getId()]);
     }
 
     public function deleteById(string $id): void
