@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+    mysql:
+        image: mysql:5.7
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+        ports:
+            - '5432:5432'
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+    php:
+        build: php-fpm
+        environment:
+            JWT_PASSPHRASE: '&^GDE#g7iHjK'
+        ports:
+            - '9000:9000'
+        volumes:
+            - ../:/var/www/html:cached
+        links:
+            - mysql
+
+    nginx:
+        build: nginx
+        ports:
+            - '80:80'
+        links:
+            - php
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx:cached
