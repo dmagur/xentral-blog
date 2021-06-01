@@ -5,7 +5,7 @@ use Blog\Entity\AbstractEntity;
 
 class Validator
 {
-    public function validate(AbstractEntity $entity, array $data)
+    public function validate(AbstractEntity $entity, array $data): array
     {
         $errors = [];
         foreach ($entity->getRequired() as $r) {

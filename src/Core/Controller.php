@@ -3,17 +3,17 @@ namespace Blog\Core;
 
 use Blog\Exception\ViewException;
 use Blog\Interface\ControllerInterface;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 
 class Controller implements ControllerInterface
 {
-    protected PersistanceInterface $persistance;
+    protected PersistenceInterface $persistence;
 
     protected \Smarty $smarty;
 
-    function __construct(PersistanceInterface $persistance, \Smarty $smarty)
+    function __construct(PersistenceInterface $persistence, \Smarty $smarty)
     {
-        $this->persistance = $persistance;
+        $this->persistence = $persistence;
         $this->smarty = $smarty;
     }
 

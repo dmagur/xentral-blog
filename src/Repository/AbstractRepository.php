@@ -2,15 +2,15 @@
 
 namespace Blog\Repository;
 
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 
 class AbstractRepository
 {
-    protected PersistanceInterface $persistance;
+    protected PersistenceInterface $persistence;
 
-    public function __construct(PersistanceInterface $persistance)
+    public function __construct(PersistenceInterface $persistence)
     {
-        $this->persistance = $persistance;
+        $this->persistence = $persistence;
     }
 
     protected function prepareSql(string $sql,array $params): string
@@ -29,30 +29,10 @@ class AbstractRepository
         return $sql;
     }
 
-    public function getCount(array $params): ?int
-    {
-        $sql = "SELECT count(*) as total_records from `".$this->table."` INNER JOIN `user` ON `user`.id=`post`.user_id";
-
-        if (isset($params['limit'])) unset($params['limit']);
-        if (isset($params['orderby'])) unset($params['orderby']);
-
-        $sql = $this->__prepare_sql($sql,$params);
-
-        $res = $this->db->query($sql);
-
-        if ($res) {
-            $count = $res->fetch_assoc();
-            return $count['total_records'];
-        }
-        else {
-            return null;
-        }
-    }
-
-    public function getOne(string $id): ?array
+    public function getOneById(string $id): ?array
     {
         $sql = 'SELECT ' . static::TABLE . '.* FROM `' . static::TABLE . '` where id = ?';
-        $records = $this->persistance->queryAndFetch($sql, [$id]);
+        $records = $this->persistence->queryAndFetch($sql, [$id]);
 
         if ($records) {
             return array_shift($records);

@@ -8,15 +8,15 @@ class PostRepository extends AbstractRepository
 {
     public const TABLE = 'post';
 
-    public function getList(array $params)
+    public function getList(array $params): ?array
     {
         $sql = 'SELECT `post`.*,CONCAT(`user`.first_name," ",`user`.last_name) as author FROM `'.self::TABLE.'` INNER JOIN `user` ON `user`.id=`post`.user_id';
         $sql = $this->prepareSql($sql, $params);
 
-        $records = $this->persistance->queryAndFetch($sql);
+        $records = $this->persistence->queryAndFetch($sql);
 
         $countSql = 'SELECT COUNT(*) as total_records FROM `'.self::TABLE.'` INNER JOIN `user` ON `user`.id=`post`.user_id';
-        $count = $this->persistance->queryAndFetch($countSql);
+        $count = $this->persistence->queryAndFetch($countSql);
 
         if ($records) {
             return ['records' => $records,'total_records' => $count[0]['total_records']];
@@ -30,7 +30,7 @@ class PostRepository extends AbstractRepository
         $sql = 'SELECT `post`.*,CONCAT(`user`.first_name," ",`user`.last_name) as author FROM `' . self::TABLE . '` INNER JOIN `user` ON `user`.id=`post`.user_id
         where post.slug=?';
 
-        $records = $this->persistance->queryAndFetch($sql, [$slug]);
+        $records = $this->persistence->queryAndFetch($sql, [$slug]);
 
         if ($records) {
             return array_shift($records);
@@ -44,7 +44,7 @@ class PostRepository extends AbstractRepository
         $sql = 'SELECT `post`.*,CONCAT(`user`.first_name," ",`user`.last_name) as author FROM `' . self::TABLE . '` INNER JOIN `user` ON `user`.id=`post`.user_id
         where post.id=?';
 
-        $records = $this->persistance->queryAndFetch($sql, [$id]);
+        $records = $this->persistence->queryAndFetch($sql, [$id]);
 
         if ($records) {
             return array_shift($records);
@@ -56,19 +56,19 @@ class PostRepository extends AbstractRepository
     public function insert(Post $post): int
     {
         $sql = 'INSERT INTO ' . self::TABLE . '(id, title, content, user_id, post_date, slug) VALUES (?, ?, ?, ?, ?, ?)';
-        $this->persistance->execute($sql, [null, $post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug()]);
-        return $this->persistance->lastInsertId();
+        $this->persistence->execute($sql, [null, $post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug()]);
+        return $this->persistence->lastInsertId();
     }
 
     public function update(Post $post): void
     {
         $sql = 'UPDATE ' . self::TABLE . ' SET title=?, content=?, user_id=?, post_date=?, slug=?, changed_at=? WHERE id=?';
-        $this->persistance->execute($sql, [$post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug(), date("Y-m-d H:i:s"), $post->getId()]);
+        $this->persistence->execute($sql, [$post->getTitle(), $post->getContent(), $post->getUserId(), $post->getPostDate(), $post->getSlug(), date("Y-m-d H:i:s"), $post->getId()]);
     }
 
     public function deleteById(string $id): void
     {
         $sql = 'DELETE FROM ' . self::TABLE . ' WHERE id = ?';
-        $this->persistance->execute($sql, [$id]);
+        $this->persistence->execute($sql, [$id]);
     }
 }

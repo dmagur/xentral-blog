@@ -2,9 +2,9 @@
 namespace Blog\Core;
 
 use Blog\Interface\ConfigProviderInterface;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 
-class MySqlDatabase implements PersistanceInterface
+class MySqlDatabase implements PersistenceInterface
 {
     private ConfigProviderInterface $config;
 
@@ -19,14 +19,6 @@ class MySqlDatabase implements PersistanceInterface
     public function connect()
     {
         $this->connection = new \PDO('mysql:host=' . $this->config->get('dbhost') . ';dbname=' . $this->config->get('dbname'), $this->config->get('dbuser'), $this->config->get('dbpass'));
-    }
-
-    public function getConnection(): \PDO
-    {
-        if (!$this->connection) {
-            $this->connect();
-        }
-        return $this->connection;
     }
 
     public function queryAndFetch(string $sql, array $bindings = [], int $fetchMode = \PDO::FETCH_ASSOC): array

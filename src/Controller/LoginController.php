@@ -3,7 +3,7 @@ namespace Blog\Controller;
 
 use Blog\Services\Authenticator;
 use Blog\Core\Controller;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 use Blog\Repository\UserRepository;
 
 class LoginController extends Controller
@@ -12,11 +12,11 @@ class LoginController extends Controller
 
     private UserRepository $userRepository;
 
-    public function __construct(PersistanceInterface $persistance, \Smarty $smarty)
+    public function __construct(PersistenceInterface $persistence, \Smarty $smarty)
     {
-        $this->userRepository = new UserRepository($persistance);
+        $this->userRepository = new UserRepository($persistence);
         $this->authenticator = new Authenticator($this->userRepository);
-        parent::__construct($persistance, $smarty);
+        parent::__construct($persistence, $smarty);
     }
 
     function index()

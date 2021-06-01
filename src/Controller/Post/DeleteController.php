@@ -3,17 +3,17 @@
 namespace Blog\Controller\Post;
 
 use Blog\Core\Controller;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 use Blog\Repository\PostRepository;
 
 class DeleteController extends Controller
 {
     private PostRepository $postRepository;
 
-    public function __construct(PersistanceInterface $persistance, \Smarty $smarty)
+    public function __construct(PersistenceInterface $persistence, \Smarty $smarty)
     {
-        $this->postRepository = new PostRepository($persistance);
-        parent::__construct($persistance, $smarty);
+        $this->postRepository = new PostRepository($persistence);
+        parent::__construct($persistence, $smarty);
     }
 
     function delete()

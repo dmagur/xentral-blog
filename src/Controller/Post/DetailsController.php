@@ -4,7 +4,7 @@ namespace Blog\Controller\Post;
 
 use Blog\Services\DateFormatter;
 use Blog\Core\Controller;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 use Blog\Repository\PostRepository;
 use Blog\Repository\UserRepository;
 
@@ -16,12 +16,12 @@ class DetailsController extends Controller
 
     private UserRepository $userRepository;
 
-    public function __construct(PersistanceInterface $persistance, \Smarty $smarty)
+    public function __construct(PersistenceInterface $persistence, \Smarty $smarty)
     {
         $this->dateFormatter = new DateFormatter();
-        $this->postRepository = new PostRepository($persistance);
-        $this->userRepository = new UserRepository($persistance);
-        parent::__construct($persistance, $smarty);
+        $this->postRepository = new PostRepository($persistence);
+        $this->userRepository = new UserRepository($persistence);
+        parent::__construct($persistence, $smarty);
     }
 
     function details()
@@ -39,7 +39,7 @@ class DetailsController extends Controller
 
         $userdata = [];
         if (!empty($_SESSION['uid'])) {
-            $userdata = $this->userRepository->getOne($_SESSION['uid']);
+            $userdata = $this->userRepository->getOneById($_SESSION['uid']);
         }
 
         $this->out('post_details','default',['post' => $data, 'errors' => $errors, 'request' => $_REQUEST, 'userdata' => $userdata]);

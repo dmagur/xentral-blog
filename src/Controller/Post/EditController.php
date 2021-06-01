@@ -7,7 +7,7 @@ use Blog\Services\SlugGenerator;
 use Blog\Services\Validator;
 use Blog\Core\Controller;
 use Blog\Entity\Post;
-use Blog\Interface\PersistanceInterface;
+use Blog\Interface\PersistenceInterface;
 use Blog\Repository\PostRepository;
 
 class EditController extends Controller
@@ -18,12 +18,12 @@ class EditController extends Controller
 
     private Validator $validator;
 
-    public function __construct(PersistanceInterface $persistance, \Smarty $smarty)
+    public function __construct(PersistenceInterface $persistence, \Smarty $smarty)
     {
-        $this->postRepository = new PostRepository($persistance);
+        $this->postRepository = new PostRepository($persistence);
         $this->postHydrator = new PostHydrator(new SlugGenerator());
         $this->validator = new Validator();
-        parent::__construct($persistance, $smarty);
+        parent::__construct($persistence, $smarty);
     }
 
     function process()

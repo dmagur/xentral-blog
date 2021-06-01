@@ -1,7 +1,7 @@
 <?php
 namespace Blog\Interface;
 
-interface PersistanceInterface
+interface PersistenceInterface
 {
     public function connect();
 

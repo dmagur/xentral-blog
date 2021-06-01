@@ -1,8 +1,7 @@
 <?php
-    $config = array(
+    return [
         'dbhost' => 'mysql',
         'dbname' => 'blog',
         'dbuser' => 'root',
         'dbpass' => 'password'
-    );
-    return $config;
+    ];
